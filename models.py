@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import *
 
+
 class BinaryLayer(Function):
     def forward(self, input):
         return torch.sign(input)
@@ -32,7 +33,7 @@ class EncoderFC(nn.Module):
     def forward(self, x):
         """
 
-        :param x: image tipically a 8x8@3 patch image
+        :param x: image typically a 8x8@3 patch image
         :return:
         """
         # Flatten the input
@@ -43,6 +44,7 @@ class EncoderFC(nn.Module):
         x = F.tanh(self.w_bin(x))
         x = self.binary(x)
         return x
+
 
 class DecoderFC(nn.Module):
     """
@@ -72,3 +74,17 @@ class DecoderFC(nn.Module):
         x = self.last_layer(x)
         x = x.view(-1, self.patch_size, self.patch_size)
         return x
+
+
+class ConvolutionalEncoder(nn.Module):
+
+    def __init__(self, patch_size):
+        super(ConvolutionalEncoder, self).__init__()
+        self.patch_size = patch_size
+
+        conv_1 = nn.Conv2d(3, 64, 3, stride=2)
+        conv_2 = nn.Conv2d(64, 256, 3, stride=1)
+        conv_3 = nn.Conv2d(256, 512, 3, stride=2)
+        self.binary = BinaryLayer()
+
+    def forward(self,x):
