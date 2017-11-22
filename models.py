@@ -48,8 +48,8 @@ class EncoderFC(nn.Module):
 
 class DecoderFC(nn.Module):
     """
-        FC Encoder composed by 3 512-units fully-connected layers
-        """
+    FC Encoder composed by 3 512-units fully-connected layers
+    """
 
     def __init__(self, coded_size, patch_size):
         super(EncoderFC, self).__init__()
@@ -82,9 +82,28 @@ class ConvolutionalEncoder(nn.Module):
         super(ConvolutionalEncoder, self).__init__()
         self.patch_size = patch_size
 
-        conv_1 = nn.Conv2d(3, 64, 3, stride=2)
-        conv_2 = nn.Conv2d(64, 256, 3, stride=1)
-        conv_3 = nn.Conv2d(256, 512, 3, stride=2)
+        self.conv_1 = nn.Conv2d(3, 64, 4, stride=2)
+        self.conv_2 = nn.Conv2d(64, 256, 3, stride=1)
+        self.conv_3 = nn.Conv2d(256, 512, 3, stride=2)
+        self.fc_1 = nn.Linear(512*6*6, 32)
+        self.fc_2 = nn.Linear(32, 2)
         self.binary = BinaryLayer()
 
     def forward(self,x):
+        x = F.tanh(self.conv_1(x))  # 32x32@3 --> 15x15@64
+        x = F.tanh(self.conv_2(x))  # 15x15@64 --> 13x13@256
+        x = F.tanh(self.conv_3(x))  # 13x13@256 --> 6x6@512
+        x = x.view(-1, 512*6*6)
+        x = F.tanh(self.fc_1(x))
+        x = F.tanh(self.fc_2(x))
+        x = self.binary(x)
+        return x
+
+
+class ConvolutionalDecoder(nn.Module):
+
+    def __init__(self, patch_size):
+        super(ConvolutionalDecoder, self).__init__()
+        self.patch_size = patch_size
+
+        self.deconv_1 = 
