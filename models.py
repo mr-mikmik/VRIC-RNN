@@ -5,14 +5,14 @@ from torch.autograd import *
 
 
 class BinaryLayer(Function):
-    def forward(self, input):
-        return torch.sign(input)
+    def forward(self, x):
+        probs_tensor = torch.rand(x.size())
+        probs_threshold = (x+1)/2
+        x[probs_tensor<=probs_threshold] = 1-x[probs_tensor<=probs_threshold]
+        x[probs_tensor>probs_threshold] = -x[probs_tensor>probs_threshold]-1
+        return x
 
-    def backward(self, grad_output):
-        input = self.saved_tensors
-        grad_output[input > 1] = 0
-        grad_output[input < -1] = 0
-        return grad_output
+
 
 
 class EncoderFC(nn.Module):
@@ -106,4 +106,4 @@ class ConvolutionalDecoder(nn.Module):
         super(ConvolutionalDecoder, self).__init__()
         self.patch_size = patch_size
 
-        self.deconv_1 = 
+        self.deconv_1 =
