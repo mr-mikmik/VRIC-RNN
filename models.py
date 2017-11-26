@@ -94,8 +94,8 @@ class ConvolutionalEncoder(nn.Module):
         x = F.tanh(self.conv_2(x))  # 15x15@64 --> 13x13@256
         x = F.tanh(self.conv_3(x))  # 13x13@256 --> 6x6@512
         x = x.view(-1, 512*6*6)
-        x = F.tanh(self.fc_1(x))
-        x = F.tanh(self.fc_2(x))
+        x = F.tanh(self.fc_1(x))    # (6*6*512) --> 32
+        x = F.tanh(self.fc_2(x))    # 32 --> 2
         x = self.binary(x)
         return x
 
@@ -105,5 +105,13 @@ class ConvolutionalDecoder(nn.Module):
     def __init__(self, patch_size):
         super(ConvolutionalDecoder, self).__init__()
         self.patch_size = patch_size
+        # TODO: Modify and check the dimentions
+        self.deconv_1 = nn.ConvTranspose2d(1,128,3,stride=2)
+        self.deconv_2 = nn.ConvTranspose2d(128,512,2,stride=2)
+        self.deconv_3 = nn.ConvTranspose2d(512,512,2,stride=2)
 
-        self.deconv_1 =
+
+    def forward(self,x):
+        x = F.tanh(self.deconv_1(x))
+        x = F.tanh(self.deconv_2(x))
+        x = F.tanh(self.deconv_3(x))
