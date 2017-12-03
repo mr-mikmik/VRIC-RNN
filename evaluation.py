@@ -39,6 +39,28 @@ def imsave(img, name):
     torchvision.utils.save_image(img, './test_imgs/'+name+'.png')
 
 
+def to_patches(x, patch_size):
+    num_patches_x = 32//patch_size
+    patches = []
+    for i in range(num_patches_x):
+        for j in range(num_patches_x):
+            patch = x[:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size]
+            patches.append(patch)
+    return patches
+
+def reconstruct_patches(patches):
+    batch_size = patches[0].size(0)
+    patch_size = patches[0].size(2)
+    num_patches_x = 32//patch_size
+    reconstructed = torch.zeros(batch_size,3,32,32)
+    p = 0
+    for i in range(num_patches_x):
+        for j in range(num_patches_x):
+            reconstructed[:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size] = patches[p]
+            p += 1
+    return reconstructed
+
+
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
