@@ -37,7 +37,7 @@ class EncoderFC(nn.Module):
         :return:
         """
         # Flatten the input
-        x = x.view(-1,3*self.patch_size**2)
+        x = x.view(-1, 3*self.patch_size**2)
         x = F.tanh(self.fc1(x))
         x = F.tanh(self.fc2(x))
         x = F.tanh(self.fc3(x))
