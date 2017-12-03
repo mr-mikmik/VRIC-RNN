@@ -55,7 +55,7 @@ transform = transforms.Compose([
 
 # Load the CIFAR LOADER
 trainset = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform)
-train_loader = torch.utils.data.Dataloader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
+train_loader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
 
 # Load the model:
 encoder = models.EncoderFC(CODED_SIZE, PATCH_SIZE)

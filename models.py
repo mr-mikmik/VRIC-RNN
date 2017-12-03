@@ -27,7 +27,7 @@ class EncoderFC(nn.Module):
         self.fc1 = nn.Linear(3*patch_size*patch_size,512)
         self.fc2 = nn.Linear(512,512)
         self.fc3 = nn.Linear(512,512)
-        self.w_bin = nn.linear(512, self.coded_size)
+        self.w_bin = nn.Linear(512, self.coded_size)
         self.binary = BinaryLayer()
 
     def forward(self, x):
@@ -52,7 +52,7 @@ class DecoderFC(nn.Module):
     """
 
     def __init__(self, coded_size, patch_size):
-        super(EncoderFC, self).__init__()
+        super(DecoderFC, self).__init__()
         self.patch_size = patch_size
         self.coded_size = coded_size
 
