@@ -44,7 +44,7 @@ def to_patches(x, patch_size):
     patches = []
     for i in range(num_patches_x):
         for j in range(num_patches_x):
-            patch = x[:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size]
+            patch = x[:, :, i*patch_size:(i+1)*patch_size, j*patch_size:(j+1)*patch_size]
             patches.append(patch)
     return patches
 
@@ -52,11 +52,11 @@ def reconstruct_patches(patches):
     batch_size = patches[0].size(0)
     patch_size = patches[0].size(2)
     num_patches_x = 32//patch_size
-    reconstructed = torch.zeros(batch_size,3,32,32)
+    reconstructed = torch.zeros(batch_size, 3, 32, 32)
     p = 0
     for i in range(num_patches_x):
         for j in range(num_patches_x):
-            reconstructed[:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size] = patches[p]
+            reconstructed[:, :, i*patch_size:(i+1)*patch_size, j*patch_size:(j+1)*patch_size] = patches[p]
             p += 1
     return reconstructed
 
@@ -85,6 +85,14 @@ print('Starting eval:::::::::::::::::')
 for i in range(5):
     imgs, _ = dataiter.next()
     imsave(torchvision.utils.make_grid(imgs), 'prova_'+str(i))
-    feats = encoder(Variable(imgs))
-    outputs = decoder(feats)
+
+    # Patch the image:
+    patches = to_patches(imgs, PATCH_SIZE)
+    r_patches = []  # Reconstructed Patches
+    for p in patches:
+        feats = encoder(Variable(p))
+        outputs = decoder(feats)
+        r_patches.append(outputs)
+    # Transform the patches into the image
+    outputs = reconstruct_patches(r_patches)
     imsave(torchvision.utils.make_grid(torch.Tensor(outputs.data)), 'prova_'+str(i)+'_decoded')

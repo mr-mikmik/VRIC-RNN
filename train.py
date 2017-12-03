@@ -93,17 +93,19 @@ for epoch in range(NUM_EPOCHS):
 
         # Get the images
         imgs = data[0]
-        # Transform the tensor into Variable
-        imgs = Variable(imgs)
+
         # Transform into patches
         patches = to_patches(imgs, PATCH_SIZE)
 
         for patch in patches:
+            # Transform the tensor into Variable
+            v_patch = Variable(patch)
+
             # Set gradients to Zero
             optimizer.zero_grad()
 
             # Forward + Backward + Optimize
-            feats = encoder(patch)
+            feats = encoder(v_patch)
             reconstructed_patches = decoder(feats)
             loss = criterion(reconstructed_patches, patch)
             loss.backward()
