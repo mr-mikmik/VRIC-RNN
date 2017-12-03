@@ -7,10 +7,12 @@ from torch.autograd import *
 class BinaryLayer(Function):
     def forward(self, x):
         probs_tensor = torch.rand(x.size())
+        errors = torch.FloatTensor(x.size())
         probs_threshold = (x+1)/2
-        x[probs_tensor<=probs_threshold] = 1-x[probs_tensor<=probs_threshold]
-        x[probs_tensor>probs_threshold] = -x[probs_tensor>probs_threshold]-1
-        return x
+        errors[probs_tensor<=probs_threshold] = 1-x[probs_tensor<=probs_threshold]
+        errors[probs_tensor>probs_threshold] = -x[probs_tensor>probs_threshold]-1
+        y = x + errors
+        return y
 
 
 class EncoderFC(nn.Module):
