@@ -47,6 +47,16 @@ def timeSince(since, percent):
     rs = es - s
     return '%s (- %s)' % (asMinutes(s), asMinutes(rs))
 
+def to_patches(x, patch_size):
+    num_patches_x = 32//patch_size
+    patches = []
+    for i in range(num_patches_x):
+        for j in range(num_patches_x):
+            patch = x[:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size]
+            patches.append(patch)
+    return patches
+
+
 
 # Normalize function so given an image of range [0, 1] transforms it into a Tensor range [-1. 1]
 transform = transforms.Compose([
@@ -73,6 +83,8 @@ optimizer = optim.Adam(params, lr=LEARNING_RATE)
 num_steps = len(train_loader)
 start = time.time()
 total_losses = []
+num_patches = (32//PATCH_SIZE)**2
+
 for epoch in range(NUM_EPOCHS):
 
     running_loss = 0.0
@@ -83,24 +95,27 @@ for epoch in range(NUM_EPOCHS):
         imgs = data[0]
         # Transform the tensor into Variable
         imgs = Variable(imgs)
+        # Transform into patches
+        patches = to_patches(imgs, PATCH_SIZE)
 
-        # Set gradients to Zero
-        optimizer.zero_grad()
+        for patch in patches:
+            # Set gradients to Zero
+            optimizer.zero_grad()
 
-        # Forward + Backward + Optimize
-        feats = encoder(imgs)
-        reconstructed_imgs = decoder(feats)
-        loss = criterion(reconstructed_imgs, imgs)
-        loss.backward()
-        optimizer.step()
-
+            # Forward + Backward + Optimize
+            feats = encoder(patch)
+            reconstructed_patches = decoder(feats)
+            loss = criterion(reconstructed_patches, patch)
+            loss.backward()
+            optimizer.step()
+            running_loss += loss.data[0]
         # STATISTICS:
-        running_loss += loss.data[0]
+
         if (i+1) % PRINT_EVERY == 0:
             print('(%s) [%d, %5d] loss: %.3f' %
                   (timeSince(start, ((epoch * num_steps + i + 1.0) / (NUM_EPOCHS * num_steps))),
-                   epoch + 1, i + 1, running_loss / PRINT_EVERY))
-            current_losses.append(running_loss/PRINT_EVERY)
+                   epoch + 1, i + 1, running_loss / PRINT_EVERY/num_patches))
+            current_losses.append(running_loss/PRINT_EVERY/num_patches)
             running_loss = 0.0
 
         # SAVE:

@@ -70,7 +70,7 @@ class DecoderFC(nn.Module):
         x = F.tanh(self.fc2(x))
         x = F.tanh(self.fc3(x))
         x = self.last_layer(x)
-        x = x.view(-1, self.patch_size, self.patch_size)
+        x = x.view(-1, 3, self.patch_size, self.patch_size)
         return x
 
 
