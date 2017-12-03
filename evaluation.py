@@ -36,9 +36,7 @@ DECODER_PATH = './saved_models/decoder-3-12500.pkl'
 
 def imsave(img, name):
     img = img / 2 + 0.5     # unnormalize
-    npimg = img.numpy()
-    im = Image.fromarray(npimg)
-    im.save('./test_imgs/'+name, np.transpose(npimg, (1, 2, 0)))
+    torchvision.utils.save_image(img, './test_imgs/'+name+'.png')
 
 
 transform = transforms.Compose(
@@ -64,7 +62,7 @@ decoder.load_state_dict(torch.load(DECODER_PATH))
 print('Starting eval:::::::::::::::::')
 for i in range(5):
     imgs, _ = dataiter.next()
-    imsave(torchvision.utils.make_grid(imgs), 'prova1.jpg')
+    imsave(torchvision.utils.make_grid(imgs), 'prova_'+str(i))
     feats = encoder(Variable(imgs))
     outputs = decoder(feats)
-    imsave(torchvision.utils.make_grid(torch.Tensor(outputs.data)), 'prova1_decoded.jpg')
+    imsave(torchvision.utils.make_grid(torch.Tensor(outputs.data)), 'prova_'+str(i)+'_decoded')
