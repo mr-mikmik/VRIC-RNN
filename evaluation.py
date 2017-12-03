@@ -22,7 +22,7 @@ NUM_EPOCHS = 3
 
 
 CODED_SIZE = 16
-PATCH_SIZE = 8 
+PATCH_SIZE = 32 
 
 PRINT_EVERY = 2000
 SAVE_STEP = 5000
@@ -56,7 +56,7 @@ def reconstruct_patches(patches):
     p = 0
     for i in range(num_patches_x):
         for j in range(num_patches_x):
-            reconstructed[:, :, i*patch_size:(i+1)*patch_size, j*patch_size:(j+1)*patch_size] = patches[p]
+            reconstructed[:, :, i*patch_size:(i+1)*patch_size, j*patch_size:(j+1)*patch_size] = patches[p].data
             p += 1
     return reconstructed
 
@@ -95,4 +95,4 @@ for i in range(5):
         r_patches.append(outputs)
     # Transform the patches into the image
     outputs = reconstruct_patches(r_patches)
-    imsave(torchvision.utils.make_grid(torch.Tensor(outputs.data)), 'prova_'+str(i)+'_decoded')
+    imsave(torchvision.utils.make_grid(outputs), 'prova_'+str(i)+'_decoded')
