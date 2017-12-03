@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 import scipy.misc
 import numpy as np
 
+from PIL import Image
+
 import models
 ############################
 #   CONSTANTS:
@@ -35,7 +37,8 @@ DECODER_PATH = './saved_models/.plk'
 def imsave(img, name):
     img = img / 2 + 0.5     # unnormalize
     npimg = img.numpy()
-    scipy.misc.imsave('./test_imgs/'+name, np.transpose(npimg, (1, 2, 0)))
+    im = Image.fromarray(npimg)
+    im.save('./test_imgs/'+name, np.transpose(npimg, (1, 2, 0)))
 
 
 transform = transforms.Compose(
