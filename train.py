@@ -7,6 +7,8 @@ from torch.autograd import Variable
 
 import math
 import time
+import os
+import numpy as np
 
 import models
 
@@ -23,7 +25,9 @@ CODED_SIZE = 4
 PATCH_SIZE = 8
 
 PRINT_EVERY = 2000
+SAVE_STEP = 5000
 
+MODEL_PATH = './saved_models/'
 ###########################
 
 #==============================================
@@ -67,9 +71,12 @@ optimizer = optim.Adam(params, lr=LEARNING_RATE)
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 num_steps = len(train_loader)
+start = time.time()
+total_losses = []
 for epoch in range(NUM_EPOCHS):
 
     running_loss = 0.0
+    current_losses = []
     for i, data in enumerate(train_loader, 0):
 
         # Get the images
@@ -87,8 +94,23 @@ for epoch in range(NUM_EPOCHS):
         loss.backward()
         optimizer.step()
 
-        #
+        # STATISTICS:
         running_loss += loss.data[0]
         if (i+1) % PRINT_EVERY == 0:
+            print('(%s) [%d, %5d] loss: %.3f' %
+                  (timeSince(start, ((epoch * num_steps + i + 1.0) / (NUM_EPOCHS * num_steps))),
+                   epoch + 1, i + 1, running_loss / PRINT_EVERY))
+            current_losses.append(running_loss/PRINT_EVERY)
+            running_loss = 0.0
 
+        # SAVE:
+        if (i + 1) % SAVE_STEP == 0:
+            torch.save(decoder.state_dict(),
+                       os.path.join(MODEL_PATH,
+                                    'decoder-%d-%d.pkl' % (epoch + 1, i + 1)))
+            torch.save(encoder.state_dict(),
+                       os.path.join(MODEL_PATH,
+                                    'encoder-%d-%d.pkl' % (epoch + 1, i + 1)))
+    total_losses.append(current_losses)
 
+print('__TRAINING DONE=================================================')
