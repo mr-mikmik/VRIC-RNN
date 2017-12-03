@@ -24,7 +24,7 @@ NUM_EPOCHS = 3
 CODED_SIZE = 16
 PATCH_SIZE = 8
 
-PRINT_EVERY = 2000
+PRINT_EVERY = 100
 SAVE_STEP = 5000
 
 MODEL_PATH = './saved_models/'
@@ -53,7 +53,7 @@ def to_patches(x, patch_size):
     for i in range(num_patches_x):
         for j in range(num_patches_x):
             patch = x[:,:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size]
-            patches.append(patch)
+            patches.append(patch.contiguous())
     return patches
 
 
@@ -107,7 +107,7 @@ for epoch in range(NUM_EPOCHS):
             # Forward + Backward + Optimize
             feats = encoder(v_patch)
             reconstructed_patches = decoder(feats)
-            loss = criterion(reconstructed_patches, patch)
+            loss = criterion(reconstructed_patches, v_patch)
             loss.backward()
             optimizer.step()
             running_loss += loss.data[0]
