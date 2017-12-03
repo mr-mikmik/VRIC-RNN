@@ -22,7 +22,7 @@ NUM_EPOCHS = 3
 
 
 CODED_SIZE = 16
-PATCH_SIZE = 32
+PATCH_SIZE = 8
 
 PRINT_EVERY = 2000
 SAVE_STEP = 5000
@@ -52,7 +52,7 @@ def to_patches(x, patch_size):
     patches = []
     for i in range(num_patches_x):
         for j in range(num_patches_x):
-            patch = x[:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size]
+            patch = x[:,:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size]
             patches.append(patch)
     return patches
 
