@@ -21,7 +21,7 @@ MOMENTUM = 0.9
 NUM_EPOCHS = 3
 
 
-CODED_SIZE = 4
+CODED_SIZE = 16
 PATCH_SIZE = 8
 
 PRINT_EVERY = 2000
@@ -112,5 +112,11 @@ for epoch in range(NUM_EPOCHS):
                        os.path.join(MODEL_PATH,
                                     'encoder-%d-%d.pkl' % (epoch + 1, i + 1)))
     total_losses.append(current_losses)
+    torch.save(decoder.state_dict(),
+               os.path.join(MODEL_PATH,
+                            'decoder-%d-%d.pkl' % (epoch + 1, i + 1)))
+    torch.save(encoder.state_dict(),
+               os.path.join(MODEL_PATH,
+                            'encoder-%d-%d.pkl' % (epoch + 1, i + 1)))
 
 print('__TRAINING DONE=================================================')
