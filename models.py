@@ -4,15 +4,33 @@ import torch.nn.functional as F
 from torch.autograd import *
 
 
-class BinaryLayer(Function):
+class BinaryLayer(nn.Module):
     def forward(self, x):
         probs_tensor = torch.rand(x.size())
-        errors = torch.FloatTensor(x.size())
-        probs_threshold = (x+1)/2
-        errors[probs_tensor<=probs_threshold] = 1-x[probs_tensor<=probs_threshold]
-        errors[probs_tensor>probs_threshold] = -x[probs_tensor>probs_threshold]-1
+        errors = Variable(torch.FloatTensor(x.size()))
+        probs_threshold = torch.div(torch.add(x, 1), 2)
+        alpha = 1-x[probs_tensor <= probs_threshold.data]
+        beta = -x[probs_tensor > probs_threshold.data] - 1
+        errors[probs_tensor <= probs_threshold.data] = alpha
+        errors[probs_tensor > probs_threshold.data] = beta
         y = x + errors
         return y
+
+    def backward(self, grad_output):
+        return grad_output
+
+
+class Binary2(Function):
+    def forward(self, x):
+        return torch.sign(x)
+
+    def backward(self, grad_output):
+        #input_t = self.saved_tensors
+        #grad_output[input_t>1] = 0
+        #grad_output[input_t<-1] = 0
+        return grad_output
+
+
 
 
 class EncoderFC(nn.Module):
@@ -28,7 +46,7 @@ class EncoderFC(nn.Module):
         self.fc2 = nn.Linear(512,512)
         self.fc3 = nn.Linear(512,512)
         self.w_bin = nn.Linear(512, self.coded_size)
-        self.binary = BinaryLayer()
+        self.binary = Binary2()
 
     def forward(self, x):
         """
@@ -87,7 +105,7 @@ class ConvolutionalEncoder(nn.Module):
         self.conv_3 = nn.Conv2d(256, 512, 3, stride=2)
         self.fc_1 = nn.Linear(512*6*6, 32)
         self.fc_2 = nn.Linear(32, 2)
-        self.binary = BinaryLayer()
+        self.binary = Binary2()
 
     def forward(self,x):
         x = F.tanh(self.conv_1(x))  # 32x32@3 --> 15x15@64
