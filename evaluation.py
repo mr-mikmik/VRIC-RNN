@@ -28,8 +28,8 @@ PRINT_EVERY = 2000
 SAVE_STEP = 5000
 
 MODEL_PATH = './saved_models/'
-ENCODER_PATH = './saved_models/encoder-1-12500.pkl'
-DECODER_PATH = './saved_models/decoder-1-12500.pkl'
+ENCODER_PATH = './saved_models/encoder-3-12500.pkl'
+DECODER_PATH = './saved_models/decoder-3-12500.pkl'
 
 ###########################
 
