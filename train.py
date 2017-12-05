@@ -21,13 +21,13 @@ MOMENTUM = 0.9
 NUM_EPOCHS = 3
 
 
-CODED_SIZE = 16
+CODED_SIZE = 32
 PATCH_SIZE = 8
 
-PRINT_EVERY = 100
+PRINT_EVERY = 10
 SAVE_STEP = 5000
 
-MODEL_PATH = './saved_models/'
+MODEL_PATH = './saved_models/fc_pch8_b32/'
 ###########################
 
 #==============================================
