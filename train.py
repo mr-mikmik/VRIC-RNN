@@ -21,13 +21,13 @@ MOMENTUM = 0.9
 NUM_EPOCHS = 3
 
 
-CODED_SIZE = 32
-PATCH_SIZE = 8
+CODED_SIZE = 512
+PATCH_SIZE = 32
 
 PRINT_EVERY = 10
 SAVE_STEP = 5000
 
-MODEL_PATH = './saved_models/fc_pch8_b32/'
+MODEL_PATH = './saved_models/conv_pch32_b512/'
 ###########################
 
 #==============================================
@@ -68,8 +68,8 @@ trainset = torchvision.datasets.CIFAR100(root='./data', train=True, download=Tru
 train_loader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
 
 # Load the model:
-encoder = models.EncoderFC(CODED_SIZE, PATCH_SIZE)
-decoder = models.DecoderFC(CODED_SIZE, PATCH_SIZE)
+encoder = models.ConvolutionalEncoder(CODED_SIZE)
+decoder = models.ConvolutionalDecoder(CODED_SIZE)
 
 # Define the LOSS and the OPTIMIZER
 criterion = nn.MSELoss()

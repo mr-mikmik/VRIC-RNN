@@ -21,15 +21,12 @@ MOMENTUM = 0.9
 NUM_EPOCHS = 3
 
 
-CODED_SIZE = 256
+CODED_SIZE = 64
 PATCH_SIZE = 32 
 
-PRINT_EVERY = 2000
-SAVE_STEP = 5000
-
 MODEL_PATH = './saved_models/'
-ENCODER_PATH = './saved_models/encoder-3-12500.pkl'
-DECODER_PATH = './saved_models/decoder-3-12500.pkl'
+ENCODER_PATH = './saved_models/conv_pch32_b64/encoder-3-12500.pkl'
+DECODER_PATH = './saved_models/conv_pch32_b64/decoder-3-12500.pkl'
 
 ###########################
 
@@ -74,8 +71,8 @@ dataiter = iter(testloader)
 
 print('Loading Models')
 # Initialize the models
-encoder = models.EncoderFC(CODED_SIZE, PATCH_SIZE)
-decoder = models.DecoderFC(CODED_SIZE, PATCH_SIZE)
+encoder = models.ConvolutionalEncoder(CODED_SIZE)
+decoder = models.ConvolutionalDecoder(CODED_SIZE)
 
 # Load the SAVED model
 encoder.load_state_dict(torch.load(ENCODER_PATH))
