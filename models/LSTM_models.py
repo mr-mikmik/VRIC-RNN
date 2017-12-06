@@ -49,7 +49,7 @@ class LSTMDecoder(nn.Module):
         self.hidden_size = 512
 
         self.fc1 = nn.Linear(self.coded_size, self.hidden_size)
-        self.fc2 = nn.Linear(self.hidden, 3*patch_size*patch_size)
+        self.fc2 = nn.Linear(self.hidden_size, 3*patch_size*patch_size)
         self.lstm1 = nn.LSTMCell(self.input_size, self.hidden_size)
         self.lstm2 = nn.LSTMCell(self.input_size, self.hidden_size)
 
