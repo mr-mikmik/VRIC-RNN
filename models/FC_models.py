@@ -75,3 +75,29 @@ class CoreFC(nn.Module):
         bits = self.fc_encoder(x)
         out = self.fc_decoder(bits)
         return out
+
+class RecursiveCoreFC(nn.Module):
+
+    def __init__(self, coded_size=4, patch_size=8, num_passes=16):
+        super(RecursiveCoreFC, self).__init__()
+        self.num_passes = num_passes
+
+        self.encoder = EncoderFC(coded_size, patch_size)
+        self.decoder = DecoderFC(coded_size, patch_size)
+
+    def forward(self, input_patch):
+        patches = []
+        bits = []
+
+        for _ in range(self.num_passes):
+            out_bits = self.encoder(input_patch)
+            output_patch = self.decoder(out_bits)
+
+            patches.append(output_patch)
+            bits.append(out_bits)
+
+            input_patch = input_patch - output_patch
+
+        reconstructed_patch = sum(patches)
+
+        return reconstructed_patch

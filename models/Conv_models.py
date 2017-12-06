@@ -66,3 +66,30 @@ class ConvolutionalCore(nn.Module):
         output_patch = self.conv_decoder(out_bits)
 
         return output_patch
+
+
+class ConvolutionalRecursiveCore(nn.Module):
+
+    def __init__(self, coded_size=8, patch_size=32, batch_size=4, num_passes=32):
+        super(ConvolutionalRecursiveCore, self).__init__()
+        self.num_passes = num_passes
+
+        self.encoder = ConvolutionalEncoder(coded_size, patch_size)
+        self.decoder = ConvolutionalDecoder(coded_size, patch_size)
+
+    def forward(self, input_patch):
+        patches = []
+        bits = []
+
+        for _ in range(self.num_passes):
+            out_bits = self.encoder(input_patch)
+            output_patch = self.decoder(out_bits)
+
+            patches.append(output_patch)
+            bits.append(bits)
+
+            input_patch = input_patch - output_patch
+
+        reconstructed_patch = sum(patches)
+
+        return reconstructed_patch
