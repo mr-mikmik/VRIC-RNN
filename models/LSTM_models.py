@@ -29,7 +29,7 @@ class LSTMEncoder(nn.Module):
         c_2_0 = torch.randn(self.batch_size, self.hidden_size)
         return (h_1_0, c_1_0), (h_2_0, c_2_0)
 
-    def forward(self, x, state=init_state()):
+    def forward(self, x, state):
         x = F.tanh(self.fc(x))
         h_out1, c_out1 = self.lstm1(x, state[0])
         h_out2, c_out2 = self.lstm2(h_out1, state[1])
@@ -60,7 +60,7 @@ class LSTMDecoder(nn.Module):
         c_2_0 = torch.randn(self.batch_size, self.hidden_size)
         return (h_1_0, c_1_0), (h_2_0, c_2_0)
 
-    def forward(self, x, state=init_state()):
+    def forward(self, x, state):
         x = F.tanh(self.fc1(x))
         h_out1, c_out1 = self.lstm1(x, state[0])
         h_out2, c_out2 = self.lstm2(h_out1, state[1])
