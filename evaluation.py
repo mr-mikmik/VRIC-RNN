@@ -26,7 +26,7 @@ def main(args):
 
     testset = torchvision.datasets.CIFAR10(root='./data', train=False,
                                            download=True, transform=transform)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE,
+    testloader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size,
                                              shuffle=False, num_workers=2)
 
     dataiter = iter(testloader)
@@ -62,7 +62,7 @@ def main(args):
 
 def imsave(img, name):
     img = img / 2 + 0.5     # unnormalize
-    saving_path = os.path.join(args.output_path,name+'.png')
+    saving_path = os.path.join(args.output_path, name+'.png')
     torchvision.utils.save_image(img, saving_path)
 
 
