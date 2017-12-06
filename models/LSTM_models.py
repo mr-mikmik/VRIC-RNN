@@ -30,6 +30,7 @@ class LSTMEncoder(nn.Module):
         return (h_1_0, c_1_0), (h_2_0, c_2_0)
 
     def forward(self, x, state):
+        x.view_(-1,3*self.patch_size*self.patch_size)
         x = F.tanh(self.fc(x))
         h_out1, c_out1 = self.lstm1(x, state[0])
         h_out2, c_out2 = self.lstm2(h_out1, state[1])
