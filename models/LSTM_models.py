@@ -94,7 +94,8 @@ class LSTMCore(nn.Module):
 
             patches.append(output_patch)
             bits.append(bits)
-
+            print input_patch.size()
+            print output_patch.size()
             input_patch = input_patch-output_patch # Create the residual patch that will be the next input
 
         reconstructed_patch = sum(patches)
