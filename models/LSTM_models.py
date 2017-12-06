@@ -96,6 +96,6 @@ class LSTMCore(nn.Module):
             bits.append(bits)
             input_patch = input_patch-output_patch # Create the residual patch that will be the next input
 
-        reconstructed_patch = patches[-1]
+        reconstructed_patch = output_patch
 
         return reconstructed_patch
