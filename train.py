@@ -83,7 +83,7 @@ def main(args):
                 running_loss = 0.0
 
             # SAVE:
-            if (i + 1) % args.save_state == 0:
+            if (i + 1) % args.save_step == 0:
                 torch.save(model.state_dict(),
                            os.path.join(args.model_path, args.model+'-p%d_b%d-%d_%d.pkl' %
                                         (args.patch_size, args.coded_size, epoch + 1, i + 1)))
