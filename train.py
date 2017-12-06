@@ -135,7 +135,7 @@ if __name__ == '__main__':
     # MODEL PARAMETERS
     # ------------------------------------------------------------------------------------------------------------------
     parser.add_argument('--model', type=str, default='fc',
-                        help='name of the model to be used: fc, conv, lstm ')
+                        help='name of the model to be used: fc, fc_rec, conv, conv_rec, lstm ')
     parser.add_argument('--batch_size', type=int, default=4,
                         help='mini-batch size')
     parser.add_argument('--coded_size', type=int, default=4,

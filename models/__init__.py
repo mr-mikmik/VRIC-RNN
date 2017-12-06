@@ -2,7 +2,6 @@ import os
 import copy
 
 import numpy as np
-import misc.utils as utils
 import torch
 
 from FC_models import *
@@ -12,7 +11,7 @@ from LSTM_models import *
 def setup(args):
     if args.model == 'fc':
         model = CoreFC(args.coded_size, args.patch_size)
-    elif args.model == 'fc_red':
+    elif args.model == 'fc_rec':
         model = RecursiveCoreFC(args.coded_size, args.patch_size, args.num_passes)
     elif args.model == 'conv':
         model = ConvolutionalCore(args.coded_size, args.patch_size)
