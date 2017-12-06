@@ -27,27 +27,27 @@ def main(args):
 
     # Load the CIFAR LOADER
     trainset = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform)
-    train_loader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
+    train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 
     # Load the model:
-    encoder = models.EncoderFC(args.coded_size, args.patch_size)
-    decoder = models.DecoderFC(args.coded_size, args.patch_size)
+    model = models.setup(args)
 
     # Define the LOSS and the OPTIMIZER
     criterion = nn.MSELoss()
-    params = list(decoder.parameters()) + list(encoder.parameters())
+    params = list(model.parameters())
     optimizer = optim.Adam(params, lr=args.learning_rate)
 
-    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    # ::::::::::::::::::::::::::::::::
     #   TRAIN----------------------
-    #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    # ::::::::::::::::::::::::::::::::
 
     num_steps = len(train_loader)
     start = time.time()
     total_losses = []
-    num_patches = (32//PATCH_SIZE)**2
+    # Divide the input 32x32 images into num_patches patch_sizexpatch_size patchs
+    num_patches = (32//args.patch_size)**2
 
-    for epoch in range(NUM_EPOCHS):
+    for epoch in range(args.num_epochs):
 
         running_loss = 0.0
         current_losses = []
@@ -57,7 +57,7 @@ def main(args):
             imgs = data[0]
 
             # Transform into patches
-            patches = to_patches(imgs, PATCH_SIZE)
+            patches = to_patches(imgs, args.batch_size)
 
             for patch in patches:
                 # Transform the tensor into Variable
@@ -67,36 +67,31 @@ def main(args):
                 optimizer.zero_grad()
 
                 # Forward + Backward + Optimize
-                feats = encoder(v_patch)
-                reconstructed_patches = decoder(feats)
+                reconstructed_patches = model(v_patch)
                 loss = criterion(reconstructed_patches, v_patch)
                 loss.backward()
                 optimizer.step()
                 running_loss += loss.data[0]
+
             # STATISTICS:
 
             if (i+1) % args.log_step == 0:
                 print('(%s) [%d, %5d] loss: %.3f' %
-                      (timeSince(start, ((epoch * num_steps + i + 1.0) / (NUM_EPOCHS * num_steps))),
-                       epoch + 1, i + 1, running_loss / PRINT_EVERY/num_patches))
-                current_losses.append(running_loss/PRINT_EVERY/num_patches)
+                      (timeSince(start, ((epoch * num_steps + i + 1.0) / (args.num_epochs * num_steps))),
+                       epoch + 1, i + 1, running_loss / args.log_step / num_patches))
+                current_losses.append(running_loss/args.log_step/num_patches)
                 running_loss = 0.0
 
             # SAVE:
             if (i + 1) % args.save_state == 0:
-                torch.save(decoder.state_dict(),
-                           os.path.join(MODEL_PATH,
-                                        'decoder-%d-%d.pkl' % (epoch + 1, i + 1)))
-                torch.save(encoder.state_dict(),
-                           os.path.join(MODEL_PATH,
-                                        'encoder-%d-%d.pkl' % (epoch + 1, i + 1)))
+                torch.save(model.state_dict(),
+                           os.path.join(args.model_path, args.model+'-p%d_b%d-%d_%d.pkl' %
+                                        (args.patch_size, args.coded_size, epoch + 1, i + 1)))
+
         total_losses.append(current_losses)
-        torch.save(decoder.state_dict(),
-                   os.path.join(MODEL_PATH,
-                                'decoder-%d-%d.pkl' % (epoch + 1, i + 1)))
-        torch.save(encoder.state_dict(),
-                   os.path.join(MODEL_PATH,
-                                'encoder-%d-%d.pkl' % (epoch + 1, i + 1)))
+        torch.save(model.state_dict(),
+                   os.path.join(args.model_path,
+                                +args.model + '-p%d_b%d-%d_%d.pkl' % (args.patch_size, args.coded_size, epoch + 1, i + 1)))
 
     print('__TRAINING DONE=================================================')
 
@@ -124,7 +119,7 @@ def to_patches(x, patch_size):
     patches = []
     for i in range(num_patches_x):
         for j in range(num_patches_x):
-            patch = x[:,:,i*patch_size:(i+1)*patch_size,j*patch_size:(j+1)*patch_size]
+            patch = x[:, :, i*patch_size:(i+1)*patch_size, j*patch_size:(j+1)*patch_size]
             patches.append(patch.contiguous())
     return patches
 
