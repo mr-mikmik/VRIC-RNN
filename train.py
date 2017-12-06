@@ -57,7 +57,7 @@ def main(args):
             imgs = data[0]
 
             # Transform into patches
-            patches = to_patches(imgs, args.batch_size)
+            patches = to_patches(imgs, args.patch_size)
 
             for patch in patches:
                 # Transform the tensor into Variable
