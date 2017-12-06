@@ -5,17 +5,22 @@ import numpy as np
 import misc.utils as utils
 import torch
 
-from FC_models import CoreFC
-from Conv_models import ConvolutionalCore
-from LSTM_models import LSTMCore
+from FC_models import *
+from Conv_models import *
+from LSTM_models import *
 
 def setup(args):
     if args.model == 'fc':
         model = CoreFC(args.coded_size, args.patch_size)
+    elif args.model == 'fc_red':
+        model = RecursiveCoreFC(args.coded_size, args.patch_size, args.num_passes)
     elif args.model == 'conv':
         model = ConvolutionalCore(args.coded_size, args.patch_size)
+    elif args.model == 'conv_rec':
+        model = ConvolutionalRecursiveCore(args.coded_size, args.patch_size, args.num_passes)
     elif args.model == 'lstm':
         model = LSTMCore(args.coded_size, args.patch_size, args.batch_size, args.num_passes)
+
     else:
         raise Exception("Caption model not supported: {}".format(args.model))
 
