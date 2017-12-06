@@ -23,10 +23,10 @@ class LSTMEncoder(nn.Module):
         self.binary = BinaryLayer()
 
     def init_state(self):
-        h_1_0 = torch.randn(self.batch_size, self.hidden_size)
-        c_1_0 = torch.randn(self.batch_size, self.hidden_size)
-        h_2_0 = torch.randn(self.batch_size, self.hidden_size)
-        c_2_0 = torch.randn(self.batch_size, self.hidden_size)
+        h_1_0 = Variable(torch.randn(self.batch_size, self.hidden_size))
+        c_1_0 = Variable(torch.randn(self.batch_size, self.hidden_size))
+        h_2_0 = Variable(torch.randn(self.batch_size, self.hidden_size))
+        c_2_0 = Variable(torch.randn(self.batch_size, self.hidden_size))
         return (h_1_0, c_1_0), (h_2_0, c_2_0)
 
     def forward(self, x, state):
@@ -55,10 +55,10 @@ class LSTMDecoder(nn.Module):
         self.lstm2 = nn.LSTMCell(self.input_size, self.hidden_size)
 
     def init_state(self):
-        h_1_0 = torch.randn(self.batch_size, self.hidden_size)
-        c_1_0 = torch.randn(self.batch_size, self.hidden_size)
-        h_2_0 = torch.randn(self.batch_size, self.hidden_size)
-        c_2_0 = torch.randn(self.batch_size, self.hidden_size)
+        h_1_0 = Variable(torch.randn(self.batch_size, self.hidden_size))
+        c_1_0 = Variable(torch.randn(self.batch_size, self.hidden_size))
+        h_2_0 = Variable(torch.randn(self.batch_size, self.hidden_size))
+        c_2_0 = Variable(torch.randn(self.batch_size, self.hidden_size))
         return (h_1_0, c_1_0), (h_2_0, c_2_0)
 
     def forward(self, x, state):
