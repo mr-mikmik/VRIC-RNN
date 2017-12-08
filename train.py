@@ -63,7 +63,7 @@ def main(args):
                 # Transform the tensor into Variable
                 v_patch = Variable(patch)
                 target_tensor = Variable(torch.zeros(v_patch.size()))
-                for p in args.num_passes:
+                for p in range(args.num_passes):
                     # Set gradients to Zero
                     optimizer.zero_grad()
 
