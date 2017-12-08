@@ -101,7 +101,7 @@ class ResidualConvolutional(nn.Module):
         self.num_passes = num_passes
 
         self.encoders = nn.ModuleList([ConvolutionalEncoder(coded_size, patch_size) for i in range(num_passes)])
-        self.encoders = nn.ModuleList([ConvolutionalDecoder(coded_size, patch_size) for i in range(num_passes)])
+        self.decoders = nn.ModuleList([ConvolutionalDecoder(coded_size, patch_size) for i in range(num_passes)])
 
     def forward(self, input_patch, pass_num):
         out_bits = self.encoders[pass_num](input_patch)
