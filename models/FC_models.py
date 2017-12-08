@@ -96,7 +96,7 @@ class RecursiveCoreFC(nn.Module):
             patches.append(output_patch)
             bits.append(out_bits)
 
-            input_patch = input_patch - output_patch
+            input_patch = input_patch.clone() - output_patch
 
         reconstructed_patch = sum(patches)
 
