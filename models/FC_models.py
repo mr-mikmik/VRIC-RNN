@@ -106,3 +106,26 @@ class ResidualCoreFC(nn.Module):
         reconstructed_patch = sum(patches)
 
         return reconstructed_patch
+
+class Residual2CoreFC(nn.Module):
+
+    def __init__(self, coded_size=4, patch_size=8, num_passes=16):
+        super(ResidualCoreFC, self).__init__()
+        self.num_passes = num_passes
+
+        self.encoders = []
+        self.decoders = []
+
+        for _ in range(self.num_passes):
+
+            self.encoders.append(EncoderFC(coded_size, patch_size))
+            self.decoders.append(DecoderFC(coded_size, patch_size))
+
+    def forward(self, input_patch, pass_num):
+
+
+        out_bits = self.encoders[pass_num](input_patch)
+        output_patch = self.decoders[pass_num](out_bits)
+
+        residual_patch = input_patch - output_patch
+        return residual_patch

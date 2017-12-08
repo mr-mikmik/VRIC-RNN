@@ -62,16 +62,18 @@ def main(args):
             for patch in patches:
                 # Transform the tensor into Variable
                 v_patch = Variable(patch)
+                target_tensor = Variable(torch.zeros(v_patch.size()))
+                for p in args.num_passes:
+                    # Set gradients to Zero
+                    optimizer.zero_grad()
 
-                # Set gradients to Zero
-                optimizer.zero_grad()
-
-                # Forward + Backward + Optimize
-                reconstructed_patches = model(v_patch)
-                loss = criterion(reconstructed_patches, v_patch)
-                loss.backward()
-                optimizer.step()
-                running_loss += loss.data[0]
+                    # Forward + Backward + Optimize
+                    reconstructed_patches = model(v_patch, p)
+                    loss = criterion(reconstructed_patches, target_tensor)
+                    loss.backward()
+                    optimizer.step()
+                    running_loss += loss.data[0]
+                    v_patch = reconstructed_patches
 
             # STATISTICS:
 
