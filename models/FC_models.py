@@ -110,7 +110,7 @@ class ResidualCoreFC(nn.Module):
 class Residual2CoreFC(nn.Module):
 
     def __init__(self, coded_size=4, patch_size=8, num_passes=16):
-        super(ResidualCoreFC, self).__init__()
+        super(Residual2CoreFC, self).__init__()
         self.num_passes = num_passes
 
         self.encoders = []
