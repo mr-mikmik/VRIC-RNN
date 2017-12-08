@@ -50,6 +50,7 @@ class ConvolutionalDecoder(nn.Module):
         x = F.tanh(self.deconv_1(x))
         x = F.tanh(self.deconv_2(x))
         x = F.tanh(self.deconv_3(x))
+        x = F.tanh(self.deconv_4(x))
         return x
 
 
