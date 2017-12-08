@@ -11,8 +11,8 @@ from LSTM_models import *
 def setup(args):
     if args.model == 'fc':
         model = CoreFC(args.coded_size, args.patch_size)
-    elif args.model == 'fc_rec':
-        model = RecursiveCoreFC(args.coded_size, args.patch_size, args.num_passes)
+    elif args.model == 'fc_res':
+        model = ResidualCoreFC(args.coded_size, args.patch_size, args.num_passes)
     elif args.model == 'conv':
         model = ConvolutionalCore(args.coded_size, args.patch_size)
     elif args.model == 'conv_rec':
