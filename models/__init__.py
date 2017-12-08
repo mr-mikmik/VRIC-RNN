@@ -12,7 +12,7 @@ def setup(args):
     if args.model == 'fc':
         model = CoreFC(args.coded_size, args.patch_size)
     elif args.model == 'fc_res':
-        model = ResidualCoreFC2(args.coded_size, args.patch_size, args.num_passes)
+        model = Residual2CoreFC(args.coded_size, args.patch_size, args.num_passes)
     elif args.model == 'conv':
         model = ConvolutionalCore(args.coded_size, args.patch_size)
     elif args.model == 'conv_rec':
