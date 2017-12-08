@@ -70,7 +70,7 @@ def main(args):
                     # Forward + Backward + Optimize
                     reconstructed_patches = model(v_patch, p)
                     loss = criterion(reconstructed_patches, target_tensor)
-                    loss.backward()
+                    loss.backward(retain_graph=True)
                     optimizer.step()
                     running_loss += loss.data[0]
                     v_patch = reconstructed_patches
