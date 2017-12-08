@@ -107,6 +107,7 @@ class ResidualCoreFC(nn.Module):
 
         return reconstructed_patch
 
+
 class Residual2CoreFC(nn.Module):
 
     def __init__(self, coded_size=4, patch_size=8, num_passes=16):
@@ -114,7 +115,7 @@ class Residual2CoreFC(nn.Module):
         self.num_passes = num_passes
 
         self.encoders = nn.ModuleList([EncoderFC(coded_size, patch_size) for i in range(num_passes)])
-        self.encoders = nn.ModuleList([EncoderFC(coded_size, patch_size) for i in range(num_passes)])
+        self.decoders = nn.ModuleList([DecoderFC(coded_size, patch_size) for i in range(num_passes)])
 
     def forward(self, input_patch, pass_num):
 
