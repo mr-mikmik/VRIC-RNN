@@ -15,8 +15,8 @@ def setup(args):
         model = Residual2CoreFC(args.coded_size, args.patch_size, args.num_passes)
     elif args.model == 'conv':
         model = ConvolutionalCore(args.coded_size, args.patch_size)
-    elif args.model == 'conv_rec':
-        model = ConvolutionalRecursiveCore(args.coded_size, args.patch_size, args.num_passes)
+    elif args.model == 'conv_res':
+        model = ResidualConvolutional(args.coded_size, args.patch_size, args.num_passes)
     elif args.model == 'lstm':
         model = LSTMCore(args.coded_size, args.patch_size, args.batch_size, args.num_passes)
 
