@@ -66,13 +66,17 @@ def main(args):
                 losses = []
                 # Set gradients to Zero
                 optimizer.zero_grad()
-                for p in range(args.num_passes):
-                    # Forward + Backward + Optimize
-                    reconstructed_patches = model(v_patch, p)
-                    losses.append(criterion(reconstructed_patches, target_tensor))
+                if args.residual:
+                    for p in range(args.num_passes):
+                        # Forward + Backward + Optimize
+                        reconstructed_patches = model(v_patch, p)
+                        losses.append(criterion(reconstructed_patches, target_tensor))
 
-                    v_patch = reconstructed_patches
-                loss = sum(losses)
+                        v_patch = reconstructed_patches
+                    loss = sum(losses)
+                else:
+                    reconstructed_patches = model(v_patch)
+                    loss = criterion(reconstructed_patches, v_patch)
                 loss.backward()
                 optimizer.step()
                 running_loss += loss.data[0]
@@ -140,6 +144,8 @@ if __name__ == '__main__':
     # ------------------------------------------------------------------------------------------------------------------
     parser.add_argument('--model', type=str, default='fc',
                         help='name of the model to be used: fc, fc_rec, conv, conv_rec, lstm ')
+    parser.add_argument('--residual', type=bool, default=False,
+                        help='Set True if the model is residual, otherwise False')
     parser.add_argument('--batch_size', type=int, default=4,
                         help='mini-batch size')
     parser.add_argument('--coded_size', type=int, default=4,

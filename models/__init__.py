@@ -17,6 +17,8 @@ def setup(args):
         model = ConvolutionalCore(args.coded_size, args.patch_size)
     elif args.model == 'conv_res':
         model = ResidualConvolutional(args.coded_size, args.patch_size, args.num_passes)
+    elif args.model == 'lstm':
+        model = LSTMCore(args.coded_size, args.patch_size, args.batch_size, args.num_passes)
     elif args.model == 'lstm_res':
         model = ResidualLSTM(args.coded_size, args.patch_size, args.batch_size, args.num_passes)
 
