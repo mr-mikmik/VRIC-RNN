@@ -16,8 +16,8 @@ import models
 
 def main(args):
     # Create the model directory if does not exist
-    if not os.path.exists(args.sa):
-        os.makedirs(args.model_path)
+    if not os.path.exists(args.output_path):
+        os.makedirs(args.output_path)
 
     # Normalize the input images
     transform = transforms.Compose(
