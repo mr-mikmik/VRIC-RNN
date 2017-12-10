@@ -62,7 +62,7 @@ def main(args):
             for patch in patches:
                 # Transform the tensor into Variable
                 v_patch = Variable(patch)
-                target_tensor = Variable(torch.zeros(v_patch.size()).double(), requires_grad=False)
+                target_tensor = Variable(torch.zeros(v_patch.size()), requires_grad=False)
                 losses = []
                 # Set gradients to Zero
                 optimizer.zero_grad()
