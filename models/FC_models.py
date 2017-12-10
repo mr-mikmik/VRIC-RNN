@@ -71,7 +71,7 @@ class CoreFC(nn.Module):
         self.fc_encoder = EncoderFC(coded_size, patch_size)
         self.fc_decoder = DecoderFC(coded_size, patch_size)
 
-    def forward(self, x):
+    def forward(self, x, num_pass=0):
         bits = self.fc_encoder(x)
         out = self.fc_decoder(bits)
         return out
