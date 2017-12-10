@@ -128,17 +128,14 @@ class Residual2CoreFC(nn.Module):
     def sample(self, input_patch):
 
         outputs = []
-        print 'input size: '+str(input_patch.size())
         for pass_num in range(self.num_passes):
             out_bits = self.encoders[pass_num](input_patch)
             output_patch = self.decoders[pass_num](out_bits)
-            print 'output size: ' + str(output_patch.size())
             outputs.append(output_patch)
 
             input_patch = input_patch - output_patch
 
         reconstructed_patch = sum(outputs)
-        print 'reconstructed size: ' + str(reconstructed_patch.size())
         return reconstructed_patch
 
 
