@@ -88,13 +88,14 @@ class LSTMCore(nn.Module):
         patches = []
         bits = []
 
+        next_input = input_patch.clone()
         for _ in range(self.num_passes):
-            out_bits, encoder_state = self.lstm_encoder(input_patch, encoder_state)
+            out_bits, encoder_state = self.lstm_encoder(next_input, encoder_state)
             output_patch, decoder_state = self.lstm_decoder(out_bits, decoder_state)
 
             patches.append(output_patch)
             bits.append(bits)
-            input_patch = input_patch-output_patch # Create the residual patch that will be the next input
+            next_input = torch.add(next_input, -1, output_patch) # Create the residual patch that will be the next input
 
         reconstructed_patch = sum(patches)
 
