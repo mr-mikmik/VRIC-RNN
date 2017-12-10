@@ -99,7 +99,7 @@ def main(args):
         total_losses.append(current_losses)
         torch.save(model.state_dict(),
                    os.path.join(args.model_path,
-                                +args.model + '-p%d_b%d-%d_%d.pkl' % (args.patch_size, args.coded_size, epoch + 1, i + 1)))
+                                args.model + '-p%d_b%d-%d_%d.pkl' % (args.patch_size, args.coded_size, epoch + 1, i + 1)))
 
     print('__TRAINING DONE=================================================')
 

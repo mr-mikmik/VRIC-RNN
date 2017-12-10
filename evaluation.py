@@ -36,7 +36,7 @@ def main(args):
     model = models.setup(args)
 
     # Load the SAVED model
-    path_to_model = os.path.join(args.model_path, +args.model+'-p%d_b%d-%d_%d.pkl' %
+    path_to_model = os.path.join(args.model_path, args.model+'-p%d_b%d-%d_%d.pkl' %
                                  (args.patch_size, args.coded_size, args.load_iter, args.load_iter))
     model.load_state_dict(torch.load(path_to_model))
 
