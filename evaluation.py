@@ -49,7 +49,10 @@ def main(args):
         patches = to_patches(imgs, args.batch_size)
         r_patches = []  # Reconstructed Patches
         for p in patches:
-            outputs = model(Variable(p))
+            if args.residual:
+                outputs = model.sample(Variable(p))
+            else:
+                outputs = model(Variable(p))
             r_patches.append(outputs)
         # Transform the patches into the image
         outputs = reconstruct_patches(r_patches)
@@ -101,6 +104,8 @@ if __name__ == '__main__':
     # ------------------------------------------------------------------------------------------------------------------
     parser.add_argument('--model', type=str, default='fc',
                         help='name of the model to be used: fc, conv, lstm ')
+    parser.add_argument('--residual', type=bool, default=False,
+                        help='Set True if the model is residual, otherwise False')
     parser.add_argument('--batch_size', type=int, default=4,
                         help='mini-batch size')
     parser.add_argument('--coded_size', type=int, default=4,
