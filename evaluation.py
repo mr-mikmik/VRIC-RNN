@@ -41,7 +41,7 @@ def main(args):
     model.load_state_dict(torch.load(path_to_model))
 
     print('Starting eval:::::::::::::::::')
-    for i in range(5):
+    for i in range(args.num_samples//args.batch_size):
         imgs, _ = dataiter.next()
         imsave(torchvision.utils.make_grid(imgs), 'prova_'+str(i))
 
@@ -139,6 +139,9 @@ if __name__ == '__main__':
     parser.add_argument('--load_epoch', type=int, default=3,
                         help='epoch in which the model to be loaded was saved')
 
+
+    parser.add_argument('--num_samples', type=int, default=20,
+                        help='number of pictures to be plotted')
     # __________________________________________________________________________________________________________________
     args = parser.parse_args()
     print(args)
