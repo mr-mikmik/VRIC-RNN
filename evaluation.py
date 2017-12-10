@@ -112,6 +112,8 @@ if __name__ == '__main__':
                         help='number of bits representing the encoded patch')
     parser.add_argument('--patch_size', type=int, default=8,
                         help='size for the encoded subdivision of the input image')
+    parser.add_argument('--num_passes', type=int, default=16,
+                        help='number of passes for recursive architectures')
 
     # ==================================================================================================================
     # OPTIMIZATION
