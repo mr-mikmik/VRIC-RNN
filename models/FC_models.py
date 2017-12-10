@@ -125,6 +125,19 @@ class Residual2CoreFC(nn.Module):
         residual_patch = input_patch - output_patch
         return residual_patch
 
+    def sample(self, input_patch):
+
+        outputs = []
+        for pass_num in range(self.num_passes):
+            out_bits = self.encoders[pass_num](input_patch)
+            output_patch = self.decoders[pass_num](out_bits)
+            outputs.append(output_patch)
+
+            input_patch = input_patch - output_patch
+
+        reconstructed_patch = sum(outputs)
+        return reconstructed_patch
+
 
 class ResidualCoreFC3(nn.Module):
 
