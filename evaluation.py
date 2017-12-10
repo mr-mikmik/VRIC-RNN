@@ -46,7 +46,7 @@ def main(args):
         imsave(torchvision.utils.make_grid(imgs), 'prova_'+str(i))
 
         # Patch the image:
-        patches = to_patches(imgs, args.batch_size)
+        patches = to_patches(imgs, args.patch_size)
         r_patches = []  # Reconstructed Patches
         for p in patches:
             if args.residual:
