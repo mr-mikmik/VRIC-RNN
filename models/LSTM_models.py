@@ -23,10 +23,10 @@ class LSTMEncoder(nn.Module):
         self.binary = BinaryLayer()
 
     def init_state(self):
-        h_1_0 = Variable(torch.zeros(self.batch_size, self.hidden_size).double(), requires_grad=False)
-        c_1_0 = Variable(torch.zeros(self.batch_size, self.hidden_size).double(), requires_grad=False)
-        h_2_0 = Variable(torch.zeros(self.batch_size, self.hidden_size).double(), requires_grad=False)
-        c_2_0 = Variable(torch.zeros(self.batch_size, self.hidden_size).double(), requires_grad=False)
+        h_1_0 = Variable(torch.zeros(self.batch_size, self.hidden_size), requires_grad=False)
+        c_1_0 = Variable(torch.zeros(self.batch_size, self.hidden_size), requires_grad=False)
+        h_2_0 = Variable(torch.zeros(self.batch_size, self.hidden_size), requires_grad=False)
+        c_2_0 = Variable(torch.zeros(self.batch_size, self.hidden_size), requires_grad=False)
         return (h_1_0, c_1_0), (h_2_0, c_2_0)
 
     def forward(self, x, state):
@@ -55,10 +55,10 @@ class LSTMDecoder(nn.Module):
         self.lstm2 = nn.LSTMCell(self.input_size, self.hidden_size)
 
     def init_state(self):
-        h_1_0 = Variable(torch.zeros(self.batch_size, self.hidden_size).double(), requires_grad=False)
-        c_1_0 = Variable(torch.zeros(self.batch_size, self.hidden_size).double(), requires_grad=False)
-        h_2_0 = Variable(torch.zeros(self.batch_size, self.hidden_size).double(), requires_grad=False)
-        c_2_0 = Variable(torch.zeros(self.batch_size, self.hidden_size).double(), requires_grad=False)
+        h_1_0 = Variable(torch.zeros(self.batch_size, self.hidden_size), requires_grad=False)
+        c_1_0 = Variable(torch.zeros(self.batch_size, self.hidden_size), requires_grad=False)
+        h_2_0 = Variable(torch.zeros(self.batch_size, self.hidden_size), requires_grad=False)
+        c_2_0 = Variable(torch.zeros(self.batch_size, self.hidden_size), requires_grad=False)
         return (h_1_0, c_1_0), (h_2_0, c_2_0)
 
     def forward(self, x, state):
