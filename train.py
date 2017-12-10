@@ -35,7 +35,7 @@ def main(args):
     # Define the LOSS and the OPTIMIZER
     criterion = nn.MSELoss()
     params = list(model.parameters())
-    optimizer = optim.Adam(params, lr=args.learning_rate)
+    optimizer = optim.Adam(params, lr=args.learning_rate, weight_decay=args.weight_decay)
 
     # ::::::::::::::::::::::::::::::::
     #   TRAIN----------------------
@@ -161,6 +161,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_epochs', type=int, default=3,
                         help='number of iterations where the system sees all the data')
     parser.add_argument('--learning_rate', type=float, default=0.001)
+    parser.add_argument('--weight_decay', type=float, default=0)
     parser.add_argument('--momentum', type=float, default=0.9)
 
     # ==================================================================================================================
