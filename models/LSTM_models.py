@@ -120,7 +120,7 @@ class ResidualLSTM(nn.Module):
         out_bits, self.encoder_state = self.lstm_encoder(input_patch, self.encoder_state)
         output_patch, self.decoder_state = self.lstm_decoder(out_bits, self.decoder_state)
 
-        residual_patch = input_patch - output_patch  # Ideally it should be 0
+        residual_patch = input_patch.clone() - output_patch  # Ideally it should be 0
         return residual_patch
 
     def sample(self, input_patch):
