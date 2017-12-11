@@ -27,6 +27,9 @@ def setup(args):
     elif args.model == 'lstm_res':
         model = ResidualLSTM(args.coded_size, args.patch_size, args.batch_size, args.num_passes)
         args.residual = True
+    elif args.model == 'lstm_mix':
+        model = LSTMMix(args.coded_size, args.patch_size, args.batch_size, args.num_passes)
+        args.residual = None
     else:
         raise Exception("Caption model not supported: {}".format(args.model))
 

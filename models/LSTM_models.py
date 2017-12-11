@@ -140,3 +140,26 @@ class ResidualLSTM(nn.Module):
         reconstructed_patch = sum(outputs)
 
         return reconstructed_patch
+
+class LSTMMix(nn.Module):
+
+    def __init__(self, coded_size=4, patch_size=8, batch_size=4, num_passes=16):
+        super(LSTMMix, self).__init__()
+        self.num_passes = num_passes
+
+        self.lstm_encoder = LSTMEncoder(coded_size, patch_size, batch_size)
+        self.lstm_decoder = LSTMDecoder(coded_size, patch_size, batch_size)
+
+        self.encoder_state = self.lstm_encoder.init_state()
+        self.decoder_state = self.lstm_decoder.init_state()
+
+    def reset_state(self):
+        self.encoder_state = self.lstm_encoder.init_state()
+        self.decoder_state = self.lstm_decoder.init_state()
+
+    def forward(self, input_patch):
+
+        out_bits, self.encoder_state = self.lstm_encoder(input_patch, self.encoder_state)
+        output_patch, self.decoder_state = self.lstm_decoder(out_bits, self.decoder_state)
+
+        return output_patch

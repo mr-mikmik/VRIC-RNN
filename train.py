@@ -58,7 +58,8 @@ def main(args):
 
             # Transform into patches
             patches = to_patches(imgs, args.patch_size)
-
+            if args.residual is None:
+                model.reset_state()
             for patch in patches:
                 # Transform the tensor into Variable
                 v_patch = Variable(patch)
