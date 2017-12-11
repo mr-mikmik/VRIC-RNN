@@ -5,6 +5,7 @@ from torch.autograd import *
 
 from binary_layers import BinaryLayer
 
+
 class LSTMEncoder(nn.Module):
 
     def __init__(self, coded_size, patch_size, batch_size):
@@ -37,6 +38,7 @@ class LSTMEncoder(nn.Module):
         bits = self.binary(F.tanh(self.binaryFC(h_out2)))
         state = ((h_out1, c_out1), (h_out2, c_out2))
         return bits, state
+
 
 class LSTMDecoder(nn.Module):
 
@@ -71,7 +73,6 @@ class LSTMDecoder(nn.Module):
         return out, state
 
 
-
 class LSTMCore(nn.Module):
 
     def __init__(self, coded_size=4, patch_size=8, batch_size=4, num_passes=16):
@@ -95,7 +96,7 @@ class LSTMCore(nn.Module):
 
             patches.append(output_patch)
             bits.append(bits)
-            next_input = torch.add(next_input, output_patch, value=-1) # Create the residual patch that will be the next input
+            next_input = next_input - output_patch # Create the residual patch that will be the next input
 
         reconstructed_patch = sum(patches)
 

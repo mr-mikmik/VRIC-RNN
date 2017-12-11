@@ -22,7 +22,7 @@ def main(args):
 
     # Normalize function so given an image of range [0, 1] transforms it into a Tensor range [-1. 1]
     transform = transforms.Compose([
-        transforms.RandomHorizontalFlip(),transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        transforms.RandomHorizontalFlip(), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
 
     # Load the CIFAR LOADER

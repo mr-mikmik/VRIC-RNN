@@ -11,17 +11,22 @@ from LSTM_models import *
 def setup(args):
     if args.model == 'fc':
         model = CoreFC(args.coded_size, args.patch_size)
+        args.residual = False
     elif args.model == 'fc_res':
         model = Residual2CoreFC(args.coded_size, args.patch_size, args.num_passes)
+        args.residual = True
     elif args.model == 'conv':
         model = ConvolutionalCore(args.coded_size, args.patch_size)
+        args.residual = False
     elif args.model == 'conv_res':
         model = ResidualConvolutional(args.coded_size, args.patch_size, args.num_passes)
+        args.residual = True
     elif args.model == 'lstm':
         model = LSTMCore(args.coded_size, args.patch_size, args.batch_size, args.num_passes)
+        args.residual = False
     elif args.model == 'lstm_res':
         model = ResidualLSTM(args.coded_size, args.patch_size, args.batch_size, args.num_passes)
-
+        args.residual = True
     else:
         raise Exception("Caption model not supported: {}".format(args.model))
 
