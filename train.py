@@ -78,6 +78,11 @@ def main(args):
                 else:
                     reconstructed_patches = model(v_patch)
                     loss = criterion(reconstructed_patches, v_patch)
+                if args.residual is not None:
+                    loss.backward()
+                    optimizer.step()
+                    running_loss += loss.data[0]
+            if args.residual is None:
                 loss.backward()
                 optimizer.step()
                 running_loss += loss.data[0]
