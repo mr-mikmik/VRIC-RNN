@@ -13,6 +13,9 @@ import numpy as np
 
 import models
 
+oneway_models = ['fc', 'conv', 'lstm']
+residual_models = ['fc_res', 'conv_res', 'lstm_res']
+mix_models = ['lstm_mix']
 
 def main(args):
 
@@ -59,16 +62,29 @@ def main(args):
             # Transform into patches
             patches = to_patches(imgs, args.patch_size)
             # TODO: Do this thing more polite!! :S
-            if args.residual is None:
-                model.reset_state()
-            for patch in patches:
-                # Transform the tensor into Variable
-                v_patch = Variable(patch)
-                target_tensor = Variable(torch.zeros(v_patch.size()), requires_grad=False)
-                losses = []
-                # Set gradients to Zero
-                optimizer.zero_grad()
-                if args.residual:
+            if args.model in oneway_models:
+                for patch in patches:
+                    # Transform the tensor into Variable
+                    v_patch = Variable(patch)
+                    target_tensor = Variable(torch.zeros(v_patch.size()), requires_grad=False)
+                    losses = []
+                    # Set gradients to Zero
+                    optimizer.zero_grad()
+                    reconstructed_patches = model(v_patch)
+                    loss = criterion(reconstructed_patches, v_patch)
+                    loss.backward()
+                    optimizer.step()
+                    running_loss += loss.data[0]
+
+            elif args.model in residual_models:
+                for patch in patches:
+                    # Transform the tensor into Variable
+                    v_patch = Variable(patch)
+                    target_tensor = Variable(torch.zeros(v_patch.size()), requires_grad=False)
+                    losses = []
+                    # Set gradients to Zero
+                    optimizer.zero_grad()
+
                     for p in range(args.num_passes):
                         # Forward + Backward + Optimize
                         reconstructed_patches = model(v_patch, p)
@@ -76,14 +92,22 @@ def main(args):
 
                         v_patch = reconstructed_patches
                     loss = sum(losses)
-                else:
-                    reconstructed_patches = model(v_patch)
-                    loss = criterion(reconstructed_patches, v_patch)
-                if args.residual is not None:
                     loss.backward()
                     optimizer.step()
                     running_loss += loss.data[0]
-            if args.residual is None:
+
+            else:
+                model.reset_state()
+                losses = []
+                optimizer.zero_grad()
+                for patch in patches:
+                    # Transform the tensor into Variable
+                    v_patch = Variable(patch)
+                    # Set gradients to Zero
+                    reconstructed_patches = model(v_patch)
+                    current_loss = criterion(reconstructed_patches, v_patch)
+                    losses.append(current_loss)
+                loss = sum(losses)
                 loss.backward()
                 optimizer.step()
                 running_loss += loss.data[0]
@@ -137,6 +161,7 @@ def to_patches(x, patch_size):
             patch = x[:, :, i*patch_size:(i+1)*patch_size, j*patch_size:(j+1)*patch_size]
             patches.append(patch.contiguous())
     return patches
+
 
 
 #=============================================================================
