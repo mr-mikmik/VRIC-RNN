@@ -1,0 +1,3 @@
+fc_res-p4_b32-8passes --> 2048 B
+fc_res-p8_b32-8passes --> 512 B
+fc_res-p8_b16-4passes --> 128 B
