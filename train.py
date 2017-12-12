@@ -58,6 +58,7 @@ def main(args):
 
             # Transform into patches
             patches = to_patches(imgs, args.patch_size)
+            # TODO: Do this thing more polite!! :S
             if args.residual is None:
                 model.reset_state()
             for patch in patches:

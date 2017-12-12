@@ -48,6 +48,8 @@ def main(args):
         # Patch the image:
         patches = to_patches(imgs, args.patch_size)
         r_patches = []  # Reconstructed Patches
+        if args.residual is None:
+            model.reset_state()
         for p in patches:
             if args.residual:
                 outputs = model.sample(Variable(p))
