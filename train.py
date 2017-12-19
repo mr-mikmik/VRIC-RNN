@@ -99,11 +99,11 @@ def main(args):
             else:
                 model.reset_state()
                 losses = []
+                # Set gradients to Zero
                 optimizer.zero_grad()
                 for patch in patches:
                     # Transform the tensor into Variable
                     v_patch = Variable(patch)
-                    # Set gradients to Zero
                     reconstructed_patches = model(v_patch)
                     current_loss = criterion(reconstructed_patches, v_patch)
                     losses.append(current_loss)

@@ -1,0 +1,7 @@
+\beamer@endinputifotherversion {3.36pt}
+\select@language {english}
+\beamer@sectionintoc {1}{VRIC: An overview of the proposal}{3}{0}{1}
+\beamer@sectionintoc {2}{Neural Networks Overview}{5}{0}{2}
+\beamer@sectionintoc {3}{Architectures and Schematics}{8}{0}{3}
+\beamer@sectionintoc {4}{Results}{18}{0}{4}
+\beamer@sectionintoc {5}{Conclusions}{30}{0}{5}
